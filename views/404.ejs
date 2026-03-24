@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | Page Not Found</title>
+    <style>
+        :root {
+            --bg-color: #fcfcfc;
+            --text-main: #1a1a1a;
+            --text-secondary: #888;
+            --accent: #151019;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: clamp(80px, 15vw, 120px);
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.05em;
+            
+            /* 1. Fallback color for older browsers */
+            color: var(--accent); 
+            
+            /* 2. The Gradient */
+            background: linear-gradient(180deg, var(--accent) 0%, #444 100%);
+            
+            /* 3. Clipping logic */
+            background-clip: text;
+            -webkit-background-clip: text;
+            
+            /* 4. Make original text transparent so gradient shows through */
+            -webkit-text-fill-color: transparent;
+            
+            line-height: 1;
+        }
+
+        p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 400px;
+            margin: 10px auto 30px auto;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            background-color: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: transform 0.2s, filter 0.2s;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.2);
+        }
+
+        /* Subtle background element */
+        .decoration {
+            position: absolute;
+            font-size: 20vw;
+            font-weight: 900;
+            color: rgba(0,0,0,0.02);
+            z-index: -1;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration">?</div>
+    
+    <div class="content">
+        <h1>404</h1>
+        <p>This page has either moved or never existed in the first place.</p>
+        <a href="/" class="btn">Return Home</a>
+    </div>
+</body>
+</html>
