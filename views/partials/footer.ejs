@@ -1,0 +1,12 @@
+<footer class="page-footer">
+        <p>&copy; <%= new Date().getFullYear() %> LinkPage. Built by Noko.</p>
+        <p class="sr-only">We've optimized this experience for you.</p>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    
+    <% if (typeof extraScripts !== 'undefined') { %>
+        <script src="/js/<%= extraScripts %>.js"></script>
+    <% } %>
+</body>
+</html>
