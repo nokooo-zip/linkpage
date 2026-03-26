@@ -92,7 +92,7 @@ const clientSchema = new mongoose.Schema({
 // ─────────────────────────────────────────────
 // INDEXES
 // ─────────────────────────────────────────────
-clientSchema.index({ username: 1 });   // fast public page lookups
+//clientSchema.index({ username: 1 });   // fast public page lookups
 clientSchema.index({ active: 1 });     // filter active clients quickly
 clientSchema.index({ createdAt: -1 }); // default sort in admin
 

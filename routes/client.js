@@ -8,7 +8,6 @@ router.get('/:username', async (req, res, next) => {
     const client = await Client.findByUsername(req.params.username);
     if (!client) return res.status(404).render('404', { message: 'Page not found.' });
 
-    // Increment view count (fire-and-forget)
     client.incrementViews().catch(() => {});
 
     res.render(`themes/${client.theme}`, {
