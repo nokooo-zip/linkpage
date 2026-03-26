@@ -3,8 +3,7 @@ const jwt = require('jsonwebtoken');
 // Protects admin routes — checks for a valid JWT token
 const adminOnly = (req, res, next) => {
   // Token can come from Authorization header OR a cookie
-  const token = req.headers.authorization?.split(' ')[1]  // "Bearer <token>"
-             || req.cookies?.adminToken;
+  const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
     return res.status(401).json({ error: 'Access denied. Please log in.' });

@@ -1,5 +1,7 @@
 require('dotenv').config();
 
+const cookieParser = require('cookie-parser');
+
 const express  = require('express');
 const path     = require('path');
 const connectDB = require('./config/db');
@@ -39,6 +41,8 @@ const loginRateLimiter = (req, res, next) => {
 // ── Body parsers ──────────────────────────────────────
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+
+app.use(cookieParser());
 
 // ── Static files ──────────────────────────────────────
 app.use(express.static(path.join(__dirname, 'public')));
