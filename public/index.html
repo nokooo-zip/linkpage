@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkPage Admin</title>
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- LOGIN -->
+  <div id="login">
+    <div class="login-card">
+      <div class="login-logo">
+        <h1>LinkPage</h1>
+        <p>Admin Dashboard</p>
+      </div>
+      <form id="login-form" autocomplete="off">
+        <div class="form-grid full" style="gap:14px">
+          <div class="form-group">
+            <label for="login-username">Username</label>
+            <input type="text" id="login-username" placeholder="admin" required autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+          <p id="login-error" style="color:var(--danger);font-size:13px;min-height:18px"></p>
+          <button type="submit" id="login-btn" class="btn btn-primary w-full" style="justify-content:center">Sign in</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+    <div class="layout">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <h1>LinkPage</h1>
+          <span>Admin Panel</span>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-label">Menu</div>
+          <button class="nav-item active" data-view="overview">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+            Overview
+          </button>
+          <button class="nav-item" data-view="clients">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="5" r="3"/><path d="M1 14c0-3.3 2.2-5 5-5s5 1.7 5 5"/><path d="M12 7c1.7 0 3 1.1 3 3.3"/><circle cx="13" cy="4" r="2"/></svg>
+            Clients
+          </button>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="sidebar-user-avatar" id="sidebar-avatar-char">A</div>
+            <span class="sidebar-user-name" id="sidebar-username">admin</span>
+          </div>
+          <button id="logout-btn">Sign out</button>
+        </div>
+      </aside>
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <span class="topbar-title" id="topbar-title">Overview</span>
+        <div class="topbar-actions">
+          <button id="new-client-btn" class="btn btn-primary btn-sm">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg>
+            New client
+          </button>
+        </div>
+      </header>
+
+      <!-- Main -->
+      <main class="main">
+
+        <!-- VIEW: OVERVIEW -->
+        <div class="view active" id="view-overview">
+          <div class="stats-grid">
+            <div class="stat-card"><div class="stat-label">Total clients</div><div class="stat-value" id="stat-total">—</div><div class="stat-sub">All time</div></div>
+            <div class="stat-card"><div class="stat-label">Live pages</div><div class="stat-value" id="stat-live">—</div><div class="stat-sub">Publicly visible</div></div>
+            <div class="stat-card"><div class="stat-label">Hidden</div><div class="stat-value" id="stat-hidden">—</div><div class="stat-sub">Inactive pages</div></div>
+            <div class="stat-card"><div class="stat-label">Total views</div><div class="stat-value" id="stat-views">—</div><div class="stat-sub">Across all pages</div></div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Recent clients</span>
+              <button class="btn btn-secondary btn-sm" onclick="Router.go('clients')">View all</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Client</th><th>Status</th><th>Theme</th><th style="text-align:right">Actions</th></tr></thead>
+                <tbody id="recent-tbody"><tr><td colspan="4" style="padding:28px;text-align:center;color:var(--text-3)">Loading…</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: CLIENTS -->
+        <div class="view" id="view-clients">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">All clients</span>
+              <div class="flex items-center gap-2">
+                <div class="search-wrap">
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3"/></svg>
+                  <input type="text" id="client-search" placeholder="Search clients…">
+                </div>
+                <button id="new-client-btn-2" class="btn btn-primary btn-sm">
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg>
+                  New
+                </button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Client</th><th>Status</th><th>Theme</th><th>Views</th><th style="text-align:right">Actions</th></tr></thead>
+                <tbody id="clients-tbody"><tr><td colspan="5" style="padding:28px;text-align:center;color:var(--text-3)">Loading…</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CLIENT FORM -->
+<div class="modal-overlay" id="modal-client">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-client-title">New client</span>
+      <button class="modal-close" aria-label="Close"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <form id="client-form" autocomplete="off">
+        <!-- Avatar -->
+        <div class="form-group" style="margin-bottom:20px">
+          <label>Profile photo</label>
+          <div class="avatar-upload">
+            <div class="avatar-preview" id="avatar-preview-el">?</div>
+            <div class="avatar-upload-actions">
+              <button type="button" id="avatar-upload-btn" class="btn btn-secondary btn-sm">Upload photo</button>
+              <span class="text-sm text-muted">JPG, PNG, WebP · Max 5MB</span>
+            </div>
+            <input type="file" id="avatar-file-input" accept="image/*" style="display:none">
+          </div>
+        </div>
+        <div class="divider"></div>
+        <!-- Basic info -->
+        <div class="form-grid" style="margin-top:16px">
+          <div class="form-group">
+            <label for="f-username">Username *</label>
+            <input type="text" id="f-username" placeholder="rohan" required>
+            <span class="form-hint">mydomain.com/<strong>rohan</strong></span>
+          </div>
+          <div class="form-group">
+            <label for="f-name">Display name *</label>
+            <input type="text" id="f-name" placeholder="Rohan Sharma" required>
+          </div>
+          <div class="form-group span-2">
+            <label for="f-bio">Bio <span class="char-count" id="bio-count">0/200</span></label>
+            <textarea id="f-bio" placeholder="A short description about this client…" rows="2"></textarea>
+          </div>
+        </div>
+        <!-- Theme -->
+        <div class="form-group" style="margin-top:16px">
+          <label>Theme</label>
+          <div class="theme-cards">
+            <div class="theme-card selected" data-theme="minimal">
+              <div class="theme-card-preview theme-minimal-preview"><div class="tp-circle"></div><div class="tp-bar"></div><div class="tp-bar" style="width:36px"></div></div>
+              <span class="theme-card-name">Minimal</span>
+            </div>
+            <div class="theme-card" data-theme="modern">
+              <div class="theme-card-preview theme-modern-preview"><div class="tp-circle"></div><div class="tp-bar"></div><div class="tp-bar" style="width:36px"></div></div>
+              <span class="theme-card-name">Modern</span>
+            </div>
+            <div class="theme-card" data-theme="business">
+              <div class="theme-card-preview theme-business-preview"><div class="tp-circle"></div><div class="tp-bar"></div><div class="tp-bar" style="width:36px"></div></div>
+              <span class="theme-card-name">Business</span>
+            </div>
+          </div>
+        </div>
+        <!-- Active toggle -->
+        <div class="form-group" style="margin-top:16px">
+          <label>Page visibility</label>
+          <div class="toggle-wrap">
+            <label class="toggle"><input type="checkbox" id="f-active" checked><span class="toggle-track"></span></label>
+            <span class="toggle-label">Page is live and publicly accessible</span>
+          </div>
+        </div>
+        <!-- Social -->
+        <details style="margin-top:18px">
+          <summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--text-2);letter-spacing:0.02em;user-select:none;padding:4px 0">Social handles (optional)</summary>
+          <div class="form-grid" style="margin-top:12px">
+            <div class="form-group"><label for="f-social-instagram">Instagram URL</label><input type="url" id="f-social-instagram" placeholder="https://instagram.com/…"></div>
+            <div class="form-group"><label for="f-social-facebook">Facebook URL</label><input type="url" id="f-social-facebook" placeholder="https://facebook.com/…"></div>
+            <div class="form-group"><label for="f-social-twitter">Twitter / X URL</label><input type="url" id="f-social-twitter" placeholder="https://twitter.com/…"></div>
+            <div class="form-group"><label for="f-social-linkedin">LinkedIn URL</label><input type="url" id="f-social-linkedin" placeholder="https://linkedin.com/…"></div>
+            <div class="form-group"><label for="f-social-youtube">YouTube URL</label><input type="url" id="f-social-youtube" placeholder="https://youtube.com/…"></div>
+            <div class="form-group"><label for="f-social-tiktok">TikTok URL</label><input type="url" id="f-social-tiktok" placeholder="https://tiktok.com/…"></div>
+            <div class="form-group span-2"><label for="f-social-whatsapp">WhatsApp link</label><input type="url" id="f-social-whatsapp" placeholder="https://wa.me/9771234567890"></div>
+          </div>
+        </details>
+      </form>
+
+      <!-- Links section (shown after client saved) -->
+      <div id="links-section" style="display:none;margin-top:24px">
+        <div class="divider"></div>
+        <div style="margin-top:20px">
+          <div class="flex items-center gap-2" style="margin-bottom:12px">
+            <span style="font-size:13px;font-weight:600;color:var(--text-1)">Links</span>
+          </div>
+          <div id="link-list" class="link-list" style="margin-bottom:16px"></div>
+          <!-- Link form -->
+          <div class="card" style="background:var(--surface-2)">
+            <div class="card-body">
+              <div class="flex items-center gap-2" style="margin-bottom:12px">
+                <span id="link-form-title" style="font-size:12px;font-weight:600;color:var(--text-2)">Add link</span>
+                <button id="cancel-link-btn" class="btn btn-ghost btn-sm ml-auto" style="display:none">Cancel</button>
+              </div>
+              <div class="form-grid" style="gap:10px">
+                <div class="form-group"><label for="link-label">Label *</label><input type="text" id="link-label" placeholder="My Instagram"></div>
+                <div class="form-group"><label for="link-icon">Icon name</label><input type="text" id="link-icon" placeholder="instagram"></div>
+                <div class="form-group span-2"><label for="link-url">URL *</label><input type="text" id="link-url" placeholder="https://instagram.com/yourhandle"></div>
+              </div>
+              <div style="margin-top:12px;text-align:right">
+                <button id="save-link-btn" class="btn btn-primary btn-sm">Save link</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close-modal>Cancel</button>
+      <button id="save-client-btn" class="btn btn-primary">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: QR CODE -->
+<div class="modal-overlay" id="modal-qr">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-header">
+      <span class="modal-title">QR Code — <span id="qr-client-name"></span></span>
+      <button class="modal-close" aria-label="Close"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="qr-panel">
+        <div class="qr-img-wrap" id="qr-img-wrap"><p style="color:var(--text-3);font-size:13px">Generating…</p></div>
+        <p class="qr-url" id="qr-url-display"></p>
+        <div class="flex gap-2">
+          <button id="qr-download-png" class="btn btn-primary btn-sm">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8M5 7l3 3 3-3"/><path d="M2 12v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-1"/></svg>
+            PNG
+          </button>
+          <button id="qr-download-svg" class="btn btn-secondary btn-sm">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8M5 7l3 3 3-3"/><path d="M2 12v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-1"/></svg>
+            SVG
+          </button>
+        </div>
+        <p class="text-sm text-muted" style="text-align:center">PNG for printing · SVG for digital</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: DELETE CONFIRM -->
+<div class="modal-overlay" id="modal-delete">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <span class="modal-title">Delete client</span>
+      <button class="modal-close" aria-label="Close"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px;color:var(--text-2);line-height:1.6">
+        Are you sure you want to delete <strong id="delete-client-name"></strong>?
+        This permanently removes their page, all links, and profile image. This cannot be undone.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button id="cancel-delete-btn" class="btn btn-secondary">Cancel</button>
+      <button id="confirm-delete-btn" class="btn btn-danger">Delete permanently</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="/admin/admin.js"></script>
+</body>
+</html>
