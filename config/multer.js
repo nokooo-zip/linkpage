@@ -1,10 +1,19 @@
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
+
+// Define absolute path to the uploads directory
+const uploadDir = path.join(__dirname, '..', 'uploads');
+
+// Ensure the directory exists
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 // Where and how to store uploaded files
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // saved to /uploads folder
+    cb(null, uploadDir); // saved to absolute path
   },
   filename: (req, file, cb) => {
     // e.g. profile-1703123456789.jpg — unique and clean

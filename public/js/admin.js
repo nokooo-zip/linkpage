@@ -504,7 +504,7 @@ function fillClientForm (client) {
   // Avatar
   const preview = document.getElementById('avatar-preview-el');
   if (client.profileImage) {
-    preview.innerHTML = `<img src="/uploads/${client.profileImage}" alt="">`;
+    preview.innerHTML = `<img src="/uploads/${client.profileImage}?t=${Date.now()}" alt="">`;
   } else {
     preview.textContent = client.name.charAt(0).toUpperCase();
   }
@@ -544,8 +544,16 @@ function updateCharCount (inputId, countId, max) {
 async function handleImageUpload (file) {
   if (!State.currentClient) { toast('Save client first before uploading image', 'warning'); return; }
   try {
-    const { profileImageUrl } = await api.uploadImage(State.currentClient._id, file);
+    const { profileImage, profileImageUrl } = await api.uploadImage(State.currentClient._id, file);
+    
+    // Update local state so the rest of the UI knows about the change
+    State.currentClient.profileImage = profileImage;
     document.getElementById('avatar-preview-el').innerHTML = `<img src="${profileImageUrl}?t=${Date.now()}" alt="">`;
+    
+    // Refresh lists in background to update table avatars
+    if (Router.current === 'clients')  Views.loadClients();
+    if (Router.current === 'overview') Views.loadOverview();
+
     toast('Profile image updated', 'success');
   } catch (e) { toast(e.message, 'danger'); }
 }
