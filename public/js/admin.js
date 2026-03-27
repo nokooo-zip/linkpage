@@ -297,6 +297,28 @@ const Views = {
     }
   },
 
+  // ── Preview modal ─────────────────────────────────────
+  openPreview (client) {
+    const url = `/${client.username}`;
+    document.getElementById('preview-client-name').textContent = client.name;
+    document.getElementById('preview-url-bar').textContent     = `${location.origin}${url}`;
+    document.getElementById('preview-open-tab').href           = url;
+
+    const iframe  = document.getElementById('preview-iframe');
+    const loading = document.getElementById('preview-loading');
+
+    loading.classList.remove('hidden');
+    iframe.src = 'about:blank';
+
+    // Small delay so modal animation completes before iframe starts loading
+    setTimeout(() => {
+      iframe.onload = () => loading.classList.add('hidden');
+      iframe.src    = url;
+    }, 80);
+
+    openModal('modal-preview');
+  },
+
   // ── Delete confirm ────────────────────────────────────
   openDeleteConfirm (id, name) {
     document.getElementById('delete-client-name').textContent = name;
@@ -354,7 +376,13 @@ function clientRow (client, showViews = false) {
     ${viewsCol}
     <td>
       <div class="row-actions">
-        <a href="/${client.username}" target="_blank" class="btn btn-ghost btn-icon" title="View page">
+        <button class="btn btn-ghost btn-icon" data-action="preview" data-id="${client._id}" title="Preview page">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 8s3-5 7-5 7 5 7 5-3 5-7 5-7-5-7-5z"/>
+            <circle cx="8" cy="8" r="2"/>
+          </svg>
+        </button>
+        <a href="/${client.username}" target="_blank" class="btn btn-ghost btn-icon" title="Open page">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/>
             <path d="M10 2h4v4M14 2 8 8"/>
@@ -418,9 +446,13 @@ function attachRowActions (container) {
     if (!btn) return;
     const { action, id, name } = btn.dataset;
 
-    if (action === 'edit')   Views.openEditForm(id);
-    if (action === 'qr')     Views.openQR(id);
-    if (action === 'delete') Views.openDeleteConfirm(id, name);
+    if (action === 'edit')    Views.openEditForm(id);
+    if (action === 'qr')      Views.openQR(id);
+    if (action === 'preview') {
+      const client = State.clients.find(c => c._id === id);
+      if (client) Views.openPreview(client);
+    }
+    if (action === 'delete')  Views.openDeleteConfirm(id, name);
     if (action === 'toggle') {
       try {
         const r = await api.toggleClient(id);
@@ -661,6 +693,35 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Add / save link ───────────────────────────────────
   document.getElementById('save-link-btn').addEventListener('click', () => Views.saveLink());
   document.getElementById('cancel-link-btn').addEventListener('click', () => resetLinkForm());
+
+  // ── Hamburger (mobile sidebar) ────────────────────────
+  const hamburgerBtn  = document.getElementById('hamburger-btn');
+  const sidebar       = document.getElementById('sidebar');
+  const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+  function openSidebar () {
+    sidebar.classList.add('open');
+    sidebarOverlay.classList.add('open');
+  }
+  function closeSidebar () {
+    sidebar.classList.remove('open');
+    sidebarOverlay.classList.remove('open');
+  }
+
+  hamburgerBtn.addEventListener('click', () => {
+    sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+  });
+  sidebarOverlay.addEventListener('click', closeSidebar);
+
+  // Close sidebar when a nav item is tapped on mobile
+  document.querySelectorAll('.nav-item[data-view]').forEach(btn => {
+    btn.addEventListener('click', closeSidebar);
+  });
+
+  // ── QR print button ───────────────────────────────────
+  document.getElementById('qr-print-btn').addEventListener('click', () => {
+    window.print();
+  });
 
   // ── Close modals ──────────────────────────────────────
   document.querySelectorAll('.modal-close, [data-close-modal]').forEach(btn => {
